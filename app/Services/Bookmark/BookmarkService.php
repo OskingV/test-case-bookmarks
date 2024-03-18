@@ -14,7 +14,7 @@ class BookmarkService
      *
      * @var BookmarkRepository
      */
-    private $repository;
+    private BookmarkRepository $repository;
 
     /**
      * Create a new CRUD service instance.
@@ -30,6 +30,7 @@ class BookmarkService
      * Store new bookmark.
      *
      * @param StoreRequest $request
+     * @param Parser $parser
      *
      * @return Bookmark
      */
@@ -40,5 +41,15 @@ class BookmarkService
         $parsedData['url'] = $url;
 
         return $this->repository->store($parsedData);
+    }
+
+    /**
+     * Get bookmarks list with pagination.
+     *
+     * @return mixed
+     */
+    public function getList(): mixed
+    {
+        return $this->repository->getList();
     }
 }

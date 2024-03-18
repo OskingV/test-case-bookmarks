@@ -28,4 +28,20 @@ class BookmarkRepository extends BaseRepository
     {
         return $this->start()->create($data);
     }
+
+    /**
+     * Get bookmarks list with pagination.
+     *
+     * @return mixed
+     */
+    public function getList(): mixed
+    {
+        return $this->start()->paginate(3, [
+            'id',
+            'favicon_path',
+            'url',
+            'title',
+            'created_at'
+        ]);
+    }
 }

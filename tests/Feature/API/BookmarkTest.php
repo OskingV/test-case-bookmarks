@@ -3,10 +3,13 @@
 namespace Tests\Feature\API;
 
 use App\Models\Bookmark;
+use Exception;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BookmarkTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * Test store bookmark method
      *
@@ -35,6 +38,34 @@ class BookmarkTest extends TestCase
                 'meta_description' => $storedBookmark->meta_description,
                 'meta_keywords' => $storedBookmark->meta_keywords
             ]
+        ]);
+    }
+
+    /**
+     * Test get bookmarks list method
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function testIndex(): void
+    {
+        $bookmarks = Bookmark::factory()->count(random_int(1,3))->create();
+        $url = config('app.url') . '/api/bookmarks';
+        $response = $this->json('GET', $url);
+        $response->assertStatus(200);
+        $array = [];
+        foreach ($bookmarks as $bookmark) {
+            $array[] = [
+                'id' => $bookmark->id,
+                'created_at' => $bookmark->created_at->format('H:i d.m.Y'),
+                'favicon_url' => $bookmark->url . $bookmark->favicon_path,
+                'url' => $bookmark->url,
+                'title' => $bookmark->title
+            ];
+        }
+        $response->assertJsonFragment([
+            'data' => $array
         ]);
     }
 }
