@@ -17,4 +17,5 @@ Route::prefix('bookmarks')
     ->group(function () {
         Route::post('', 'App\Http\Controllers\API\Bookmark\StoreController');
         Route::get('', 'App\Http\Controllers\API\Bookmark\IndexController');
+        Route::get('{id}', 'App\Http\Controllers\API\Bookmark\ShowController');
     });

@@ -10,6 +10,7 @@ use Tests\TestCase;
 class BookmarkTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * Test store bookmark method
      *
@@ -50,7 +51,7 @@ class BookmarkTest extends TestCase
      */
     public function testIndex(): void
     {
-        $bookmarks = Bookmark::factory()->count(random_int(1,3))->create();
+        $bookmarks = Bookmark::factory()->count(random_int(1, 3))->create();
         $url = config('app.url') . '/api/bookmarks';
         $response = $this->json('GET', $url);
         $response->assertStatus(200);
@@ -66,6 +67,31 @@ class BookmarkTest extends TestCase
         }
         $response->assertJsonFragment([
             'data' => $array
+        ]);
+    }
+
+    /**
+     * Test get bookmark's info
+     *
+     * @return void
+     */
+    public function testShow(): void
+    {
+        $bookmark = Bookmark::factory()->create();
+        $url = config('app.url') . '/api/bookmarks/' . $bookmark->id;
+        $response = $this->json('GET', $url);
+        $response->assertStatus(200);
+        $resultArray = [
+            'created_at' => $bookmark->created_at->format('H:i d.m.Y'),
+            'favicon_url' => $bookmark->url . $bookmark->favicon_path,
+            'id' => $bookmark->id,
+            'meta_description' => $bookmark->meta_description,
+            'meta_keywords' => $bookmark->meta_keywords,
+            'url' => $bookmark->url,
+            'title' => $bookmark->title,
+        ];
+        $response->assertJsonFragment([
+            'data' => $resultArray
         ]);
     }
 }
