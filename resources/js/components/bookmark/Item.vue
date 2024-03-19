@@ -62,7 +62,7 @@ export default {
     },
     methods: {
         async getBookmark(id) {
-            let res = await axios.get('/bookmarks/${id}');
+            let res = await axios.get(`/bookmarks/${id}`);
             console.log(res);
             this.bookmark = res.data.data;
         }
