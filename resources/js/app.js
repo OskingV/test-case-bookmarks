@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 library.add(faEye);
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 import App from './components/App.vue'
 let app = createApp(App)
@@ -17,5 +18,6 @@ const router = createRouter({
 })
 
 app.use(router);
+app.component("pagination", Bootstrap5Pagination);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app")

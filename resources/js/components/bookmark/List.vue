@@ -36,6 +36,7 @@
                 </tr>
                 </tbody>
             </table>
+            <pagination :data="laravelData" @pagination-change-page="getBookmarksByPage"></pagination>
         </div>
     </div>
 </template>
@@ -43,20 +44,23 @@
 <script>
 import axios from "../config/axios.js";
 import toastr from "toastr";
+
 export default {
     name: "List",
     data() {
         return {
             bookmarks: [], // Initial state
+            laravelData: {},
         };
     },
     mounted() {
-        this.getBookmarks();
+        this.getBookmarksByPage();
     },
     methods: {
-        async getBookmarks() {
-            let res = await axios.get('/bookmarks');
+        async getBookmarksByPage(page = 1) {
+            let res = await axios.get(`/bookmarks?page=${page}`);
             this.bookmarks = res.data.data;
+            this.laravelData = res.data;
         }
     },
 };

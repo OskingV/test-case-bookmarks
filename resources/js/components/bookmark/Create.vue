@@ -32,12 +32,9 @@ export default {
     methods: {
         async saveBookmark() {
             try {
-
                 let res = await axios.post('/bookmarks', this.bookmark);
-                console.log(res.data.data.id);
                 this.$router.push({ name: 'Item', params: { id: res.data.data.id } })
             } catch (error) {
-                console.log(error);
                 let errors = error.response.data.errors;
                 for (let key in errors) {
                     toastr.error(errors[key])
