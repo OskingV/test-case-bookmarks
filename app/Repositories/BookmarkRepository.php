@@ -36,13 +36,15 @@ class BookmarkRepository extends BaseRepository
      */
     public function getList(): mixed
     {
-        return $this->start()->paginate(3, [
-            'id',
-            'favicon_path',
-            'url',
-            'title',
-            'created_at'
-        ]);
+        return $this->start()
+            ->orderBy('created_at', 'desc')
+            ->paginate(3, [
+                'id',
+                'favicon_path',
+                'url',
+                'title',
+                'created_at'
+            ]);
     }
 
     /**
