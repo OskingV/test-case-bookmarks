@@ -14,6 +14,7 @@
                     <th>Favicon</th>
                     <th>URL</th>
                     <th>Title</th>
+                    <th>View</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,6 +23,16 @@
                     <td><img :src="bookmark.favicon_url" alt="favicon" style="width: 16px"></td>
                     <td>{{ bookmark.url }}</td>
                     <td>{{ bookmark.title }}</td>
+                    <td>
+                        <router-link
+                            :to="{
+                                name: 'Item',
+                                params: { id: bookmark.id },
+                            }"
+                            to="/create" class="btn btn-secondary">
+                            <font-awesome-icon :icon="['fas', 'eye']" />
+                        </router-link>
+                    </td>
                 </tr>
                 </tbody>
             </table>
