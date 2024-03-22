@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\API;
 
+use App\Exports\BookmarksExport;
 use App\Models\Bookmark;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookmarkTest extends TestCase
 {
@@ -119,5 +121,20 @@ class BookmarkTest extends TestCase
             $resArray[$bookmark->id] = $bookmark->title;
         }
         $this->assertEquals(json_encode($array), json_encode($resArray));
+    }
+
+    /**
+     * Test download excel
+     *
+     * @return void
+     */
+    public function testDownloadExcel(): void
+    {
+        $bookmark = Bookmark::factory()->create();
+        Excel::fake();
+        $this->get('/api/bookmarks/excel');
+        Excel::assertDownloaded('bookmarks.xlsx', function (BookmarksExport $export) use ($bookmark) {
+            return $export->collection()->contains($bookmark->id);
+        });
     }
 }

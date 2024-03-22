@@ -3,6 +3,9 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h1>Data</h1>
+                <a href="/api/bookmarks/excel" download>
+                    <button type="button" class="btn btn-warning">Download excel</button>
+                </a>
                 <router-link to="/create" class="btn btn-secondary">Create</router-link>
             </div>
         </div>
@@ -86,7 +89,7 @@ export default {
             this.sortField = field;
             this.sortType = type;
         },
-        getQueryStringList(payload) {
+        getQueryStringList (payload) {
             return Object.keys(payload).map(key => key + '=' + payload[key]).join('&');
         }
     },

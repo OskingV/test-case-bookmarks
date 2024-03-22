@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Bookmark;
 use App\Models\Bookmark as Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class BookmarkRepository extends BaseRepository
 {
@@ -73,5 +74,24 @@ class BookmarkRepository extends BaseRepository
             'meta_keywords',
             'created_at',
         ]);
+    }
+
+    /**
+     * Get collection for excel file.
+     *
+     * @return Collection
+     */
+    public function getExcelList(): Collection
+    {
+        return $this->start()->orderBy('created_at', 'desc')
+            ->get([
+                'id',
+                'favicon_path',
+                'url',
+                'title',
+                'meta_description',
+                'meta_keywords',
+                'created_at'
+            ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\API\Bookmark\StoreRequest;
 use App\Models\Bookmark;
 use App\Repositories\BookmarkRepository;
 use App\Services\Site\Contracts\Parser;
+use Illuminate\Database\Eloquent\Collection;
 
 class BookmarkService
 {
@@ -71,5 +72,15 @@ class BookmarkService
     public function getItem(int $id): Bookmark
     {
         return $this->repository->getItem($id);
+    }
+
+    /**
+     * Get bookmarks list collection for excel file.
+     *
+     * @return Collection
+     */
+    public function getExcelList(): Collection
+    {
+        return $this->repository->getExcelList();
     }
 }
