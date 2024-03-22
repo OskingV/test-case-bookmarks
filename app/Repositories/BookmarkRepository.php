@@ -32,12 +32,20 @@ class BookmarkRepository extends BaseRepository
     /**
      * Get bookmarks list with pagination.
      *
+     * @param array $sortConfig
+     *
      * @return mixed
      */
-    public function getList(): mixed
+    public function getList(array $sortConfig = []): mixed
     {
-        return $this->start()
-            ->orderBy('created_at', 'desc')
+        $query = $this->start();
+        if (!empty($sortConfig)) {
+            $query = $query->orderBy($sortConfig['field'], $sortConfig['type']);
+        } else {
+            $query = $query->orderBy('created_at', 'desc');
+        }
+
+        return $query
             ->paginate(3, [
                 'id',
                 'favicon_path',

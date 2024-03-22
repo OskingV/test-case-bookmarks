@@ -10,10 +10,10 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>Created at</th>
+                    <th>Created at <sort field="created_at"></sort></th>
                     <th>Favicon</th>
-                    <th>URL</th>
-                    <th>Title</th>
+                    <th>URL <sort field="url"></sort></th>
+                    <th>Title <sort field="title"></sort></th>
                     <th>View</th>
                 </tr>
                 </thead>
@@ -51,16 +51,43 @@ export default {
         return {
             bookmarks: [], // Initial state
             laravelData: {},
+            page: 1,
+            sortField: null,
+            sortType: null,
         };
     },
     mounted() {
         this.getBookmarksByPage();
     },
     methods: {
-        async getBookmarksByPage(page = 1) {
-            let res = await axios.get(`/bookmarks?page=${page}`);
+        async getBookmarksByPage() {
+            const payload = {
+                page: this.page
+            };
+            if (!(this.sortField === null && this.sortType === null)) {
+                payload.sort_field = this.sortField;
+                payload.sort_type = this.sortType;
+            }
+            const queryString = this.getQueryStringList(payload);
+            let res = await axios.get(`/bookmarks?${queryString}`);
             this.bookmarks = res.data.data;
             this.laravelData = res.data;
+        },
+        async getSortList (field, type) {
+            const payload = {
+                sort_field: field,
+                sort_type: type,
+                page: this.page
+            };
+            const queryString = this.getQueryStringList(payload);
+            let res = await axios.get(`/bookmarks?${queryString}`);
+            this.bookmarks = res.data.data;
+            this.laravelData = res.data;
+            this.sortField = field;
+            this.sortType = type;
+        },
+        getQueryStringList(payload) {
+            return Object.keys(payload).map(key => key + '=' + payload[key]).join('&');
         }
     },
 };

@@ -2,6 +2,7 @@
 
 namespace App\Services\Bookmark;
 
+use App\Http\Requests\API\Bookmark\IndexRequest;
 use App\Http\Requests\API\Bookmark\StoreRequest;
 use App\Models\Bookmark;
 use App\Repositories\BookmarkRepository;
@@ -46,11 +47,18 @@ class BookmarkService
     /**
      * Get bookmarks list with pagination.
      *
+     * @param IndexRequest $request
+     *
      * @return mixed
      */
-    public function getList(): mixed
+    public function getList(IndexRequest $request): mixed
     {
-        return $this->repository->getList();
+        $sortConfig = $request->exists('sort_field') ? [
+            'field' => $request->sort_field,
+            'type' => $request->sort_type
+        ] : [];
+
+        return $this->repository->getList($sortConfig);
     }
 
     /**

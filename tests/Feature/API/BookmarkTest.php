@@ -94,4 +94,30 @@ class BookmarkTest extends TestCase
             'data' => $resultArray
         ]);
     }
+
+    /**
+     * Test sort bookmarks list
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function testIndexSort(): void
+    {
+        $bookmarks = Bookmark::factory()->count(3)->create();
+        $url = config('app.url') . '/api/bookmarks?sort_field=title&sort_type=asc';
+        $response = $this->json('GET', $url);
+        $response->assertStatus(200);
+        $array = [];
+        foreach ($bookmarks as $bookmark) {
+            $array[$bookmark->id] = $bookmark->title;
+        }
+        asort($array);
+        $resArray = [];
+        $resultData = json_decode($response->content())->data;
+        foreach ($resultData as $bookmark) {
+            $resArray[$bookmark->id] = $bookmark->title;
+        }
+        $this->assertEquals(json_encode($array), json_encode($resArray));
+    }
 }
