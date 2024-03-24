@@ -32,7 +32,7 @@
                                 name: 'Item',
                                 params: { id: bookmark.id },
                             }"
-                            to="/create" class="btn btn-secondary">
+                            to="/create" class="btn btn-info">
                             <font-awesome-icon :icon="['fas', 'eye']" />
                         </router-link>
                     </td>
@@ -46,7 +46,6 @@
 
 <script>
 import axios from "../config/axios.js";
-import toastr from "toastr";
 
 export default {
     name: "List",

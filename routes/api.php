@@ -19,4 +19,5 @@ Route::prefix('bookmarks')
         Route::get('', 'App\Http\Controllers\API\Bookmark\IndexController');
         Route::get('excel', 'App\Http\Controllers\API\Bookmark\ExcelController');
         Route::get('{id}', 'App\Http\Controllers\API\Bookmark\ShowController');
+        Route::delete('{id}', 'App\Http\Controllers\API\Bookmark\DestroyController');
     });

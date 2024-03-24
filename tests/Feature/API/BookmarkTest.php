@@ -6,6 +6,7 @@ use App\Exports\BookmarksExport;
 use App\Models\Bookmark;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -20,8 +21,10 @@ class BookmarkTest extends TestCase
      */
     public function testStore(): void
     {
+        $password = 'pass';
         $storeBookmarkData = [
-            'url' => 'https://www.google.com'
+            'url' => 'https://www.google.com',
+            'password' => $password
         ];
         $url = config('app.url') . '/api/bookmarks';
         $response = $this->json('POST', $url, $storeBookmarkData);
@@ -42,6 +45,7 @@ class BookmarkTest extends TestCase
                 'meta_keywords' => $storedBookmark->meta_keywords
             ]
         ]);
+        $this->assertTrue(Hash::check($password, $storedBookmark->password));
     }
 
     /**
@@ -136,5 +140,38 @@ class BookmarkTest extends TestCase
         Excel::assertDownloaded('bookmarks.xlsx', function (BookmarksExport $export) use ($bookmark) {
             return $export->collection()->contains($bookmark->id);
         });
+    }
+
+    /**
+     * Test destroy
+     *
+     * @return void
+     */
+    public function testDestroy(): void
+    {
+        $password = '12345678';
+        $deleteBookmarkData = [
+            'password' => $password
+        ];
+        $bookmark = Bookmark::factory()->create(['password' => $password]);
+        $url = config('app.url') . '/api/bookmarks/' . $bookmark->id;
+        $response = $this->json('DELETE', $url, $deleteBookmarkData);
+        $response->assertStatus(200);
+        $this->assertNull(Bookmark::find($bookmark->id));
+    }
+
+    /**
+     * Test destroy
+     *
+     * @return void
+     */
+    public function testFailDestroy(): void
+    {
+        $password = '12345678';
+        $bookmark = Bookmark::factory()->create(['password' => $password]);
+        $url = config('app.url') . '/api/bookmarks/' . $bookmark->id;
+        $response = $this->json('DELETE', $url);
+        $response->assertStatus(403);
+        $this->assertNotNull(Bookmark::find($bookmark->id));
     }
 }

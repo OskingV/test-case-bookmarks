@@ -2,16 +2,21 @@
 
 namespace App\Http\Requests\API\Bookmark;
 
+use App\Models\Bookmark;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 
-class StoreRequest extends FormRequest
+class DestroyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $bookmarks = Bookmark::find($this->route('id'));
+
+        return $bookmarks->password === null
+            || Hash::check($this->input('password'), $bookmarks->password);
     }
 
     /**
@@ -21,9 +26,6 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'url' => 'required|active_url|unique:bookmarks',
-            'password' => 'string|nullable',
-        ];
+        return [];
     }
 }

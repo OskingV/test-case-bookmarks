@@ -11,6 +11,8 @@
                 <div class="form-group">
                     <label for="title">URL</label>
                     <input type="text" name="url" id="url" class="form-control" v-model="bookmark.url" />
+                    <label for="title">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" v-model="bookmark.password" />
                 </div>
                 <button type="button" class="btn btn-secondary mt-2" v-on:click="saveBookmark()">Save</button>
             </form>

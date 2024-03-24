@@ -38,9 +38,8 @@ class BookmarkService
      */
     public function store(StoreRequest $request, Parser $parser): Bookmark
     {
-        $url = $request->url;
-        $parsedData = $parser->parse($url);
-        $parsedData['url'] = $url;
+        $parsedData = $parser->parse($request->url);
+        $parsedData = array_merge($parsedData, $request->only(['url', 'password']));
 
         return $this->repository->store($parsedData);
     }
@@ -82,5 +81,17 @@ class BookmarkService
     public function getExcelList(): Collection
     {
         return $this->repository->getExcelList();
+    }
+
+    /**
+     * Delete bookmark by id.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    public function deleteItem(int $id): void
+    {
+        $this->repository->delete($id);
     }
 }

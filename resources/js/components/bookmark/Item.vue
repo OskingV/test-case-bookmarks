@@ -44,12 +44,20 @@
                 </tr>
                 </tbody>
             </table>
+            <form action="">
+                <div class="form-group">
+                    <label for="title">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" v-model="bookmark.password" />
+                </div>
+                <button type="button" class="btn btn-danger" v-on:click="deleteBookmark()">Delete</button>
+            </form>
         </div>
     </div>
 </template>
 
 <script>
 import axios from "../config/axios.js";
+import toastr from "toastr";
 export default {
     name: "Item",
     data() {
@@ -64,7 +72,19 @@ export default {
         async getBookmark(id) {
             let res = await axios.get(`/bookmarks/${id}`);
             this.bookmark = res.data.data;
-        }
+        },
+        async deleteBookmark() {
+            try {
+                await axios.delete(`/bookmarks/${this.bookmark.id}`, {
+                    data: {
+                        password: this.bookmark.password
+                    }
+                });
+                this.$router.push({ name: 'List'})
+            } catch (error) {
+                toastr.error(error.response.data.message);
+            }
+        },
     },
 };
 </script>

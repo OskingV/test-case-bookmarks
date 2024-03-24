@@ -94,4 +94,16 @@ class BookmarkRepository extends BaseRepository
                 'created_at'
             ]);
     }
+
+    /**
+     * Delete bookmark by id.
+     *
+     * @param int $id
+     *
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $this->model::destroy($id);
+    }
 }

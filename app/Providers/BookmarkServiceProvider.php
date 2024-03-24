@@ -21,6 +21,5 @@ class BookmarkServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

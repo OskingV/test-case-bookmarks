@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\BookmarkObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([BookmarkObserver::class])]
 class Bookmark extends Model
 {
     use HasFactory;
@@ -26,6 +29,7 @@ class Bookmark extends Model
         'url',
         'title',
         'meta_description',
-        'meta_keywords'
+        'meta_keywords',
+        'password',
     ];
 }

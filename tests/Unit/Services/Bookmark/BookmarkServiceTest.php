@@ -37,7 +37,13 @@ class BookmarkServiceTest extends TestCase
                 $mock->shouldReceive('parse')->with($url)->andReturn($bookmarkData)->once();
             })
         );
-        $storeRequestMock = $this->mock(StoreRequest::class);
+        $storeRequestMock = $this->getMockBuilder(StoreRequest::class)
+            ->onlyMethods(['only'])
+            ->getMock();
+        $storeRequestMock->expects($this->once())
+            ->method('only')
+            ->with(['url', 'password'])
+            ->willReturn(['url' => $url]);
         $storeRequestMock->url = $url;
         $this->instance(StoreRequest::class, $storeRequestMock);
         $bookmark = app()->call([$service, 'store']);
