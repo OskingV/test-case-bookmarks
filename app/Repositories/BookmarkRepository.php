@@ -34,12 +34,19 @@ class BookmarkRepository extends BaseRepository
      * Get bookmarks list with pagination.
      *
      * @param array $sortConfig
+     * @param string $searchString
      *
      * @return mixed
      */
-    public function getList(array $sortConfig = []): mixed
+    public function getList(array $sortConfig = [], string $searchString = ''): mixed
     {
         $query = $this->start();
+        if ($searchString) {
+            $query = $query->where('url', 'LIKE', '%' . $searchString . '%')
+                ->orWhere('title', 'LIKE', '%' . $searchString . '%')
+                ->orWhere('meta_description', 'LIKE', '%' . $searchString . '%')
+                ->orWhere('meta_keywords', 'LIKE', '%' . $searchString . '%');
+        }
         if (!empty($sortConfig)) {
             $query = $query->orderBy($sortConfig['field'], $sortConfig['type']);
         } else {
@@ -77,7 +84,7 @@ class BookmarkRepository extends BaseRepository
     }
 
     /**
-     * Get collection for excel file.
+     * Get collection for Excel file.
      *
      * @return Collection
      */

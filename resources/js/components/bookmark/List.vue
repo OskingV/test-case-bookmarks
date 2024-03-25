@@ -1,4 +1,8 @@
 <template>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2" v-model="search">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="getListBySearch()"><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></button>
+    </div>
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
@@ -56,6 +60,7 @@ export default {
             page: 1,
             sortField: null,
             sortType: null,
+            search: '',
         };
     },
     mounted() {
@@ -70,6 +75,9 @@ export default {
                 payload.sort_field = this.sortField;
                 payload.sort_type = this.sortType;
             }
+            if (this.search.length > 2) {
+                payload.search = this.search;
+            }
             const queryString = this.getQueryStringList(payload);
             let res = await axios.get(`/bookmarks?${queryString}`);
             this.bookmarks = res.data.data;
@@ -81,12 +89,28 @@ export default {
                 sort_type: type,
                 page: this.page
             };
+            if (this.search.length > 2) {
+                payload.search = this.search;
+            }
             const queryString = this.getQueryStringList(payload);
             let res = await axios.get(`/bookmarks?${queryString}`);
             this.bookmarks = res.data.data;
             this.laravelData = res.data;
             this.sortField = field;
             this.sortType = type;
+        },
+        async getListBySearch () {
+            if (this.search.length > 2) {
+                const payload = {
+                    search: this.search
+                };
+                const queryString = this.getQueryStringList(payload);
+                let res = await axios.get(`/bookmarks?${queryString}`);
+                this.bookmarks = res.data.data;
+                this.laravelData = res.data;
+            } else {
+                this.getBookmarksByPage();
+            }
         },
         getQueryStringList (payload) {
             return Object.keys(payload).map(key => key + '=' + payload[key]).join('&');

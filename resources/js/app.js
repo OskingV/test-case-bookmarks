@@ -5,10 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'toastr/build/toastr.min.css'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEye, faSortAmountUp, faSortAmountDown } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faSortAmountUp, faSortAmountDown, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 library.add(faEye);
 library.add(faSortAmountUp);
 library.add(faSortAmountDown);
+library.add(faMagnifyingGlass);
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 import Sort from './components/bookmark/List/SortComponent.vue';
 
