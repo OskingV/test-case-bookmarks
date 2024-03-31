@@ -165,7 +165,7 @@ class BookmarkTest extends TestCase
      *
      * @return void
      */
-    public function testFailDestroy(): void
+    public function testFailPasswordDestroy(): void
     {
         $password = '12345678';
         $bookmark = Bookmark::factory()->create(['password' => $password]);
@@ -173,6 +173,24 @@ class BookmarkTest extends TestCase
         $response = $this->json('DELETE', $url);
         $response->assertStatus(403);
         $this->assertNotNull(Bookmark::find($bookmark->id));
+    }
+
+    /**
+     * Test destroy with wrong id
+     *
+     * @return void
+     */
+    public function testFailIdDestroy(): void
+    {
+        $password = '12345678';
+        $deleteBookmarkData = [
+            'password' => $password
+        ];
+        $bookmark = Bookmark::factory()->create(['password' => $password]);
+        $url = config('app.url') . '/api/bookmarks/' . (++$bookmark->id);
+        $response = $this->json('DELETE', $url, $deleteBookmarkData);
+        $response->assertStatus(404);
+        $this->assertNotNull(Bookmark::find(--$bookmark->id));
     }
 
     /**
@@ -186,8 +204,8 @@ class BookmarkTest extends TestCase
     {
         Bookmark::factory()->count(3)->create();
         $searchString = 'ABOBA';
-        $bookmark = Bookmark::factory()->create(['title' => 'Windows window '. $searchString .' windowsXP']);
-        $url = config('app.url') . '/api/bookmarks?search='.$searchString;
+        $bookmark = Bookmark::factory()->create(['title' => 'Windows window ' . $searchString . ' windowsXP']);
+        $url = config('app.url') . '/api/bookmarks?search=' . $searchString;
         $response = $this->json('GET', $url);
         $response->assertStatus(200);
         $resultData = json_decode($response->content())->data;

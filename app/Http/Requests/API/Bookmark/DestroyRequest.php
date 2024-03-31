@@ -13,7 +13,7 @@ class DestroyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $bookmarks = Bookmark::find($this->route('id'));
+        $bookmarks = Bookmark::findOrFail($this->route('id'));
 
         return $bookmarks->password === null
             || Hash::check($this->input('password'), $bookmarks->password);
